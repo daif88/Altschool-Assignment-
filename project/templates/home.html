@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Home Page
+{% endblock %}
+
+{% block content %}
+    {% for new in news.items %}
+        <article class="media content-section">
+            <img src="{{ url_for('static', filename='profile_pics/' + new.author.image_file) }}" class="rounded-circle article-img" alt="">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="{{ url_for('user_posts', username=new.author.username) }}">{{ new.author.username }}</a>
+                    <small class="text-muted">{{ new.date_posted }}</small>
+                </div>
+                <h2><a class="article-title" href="{{ url_for('post', post_id=new.id) }}">{{ new.title }}</a></h2>
+                <p class="article-content">{{ new.content }}</p>
+            </div>
+        </article>
+    {% endfor %}
+    {% for page_num in news.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if news.page == page_num %}
+                <a class="btn btn-info mb-4" href="{{ url_for('user_posts',username=current_user.username, page=page_num) }}">{{ page_num }}</a>
+            {% else %}
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('user_posts',username=current_user.username, page=page_num) }}">{{ page_num }}</a>
+            {%endif%}
+        {% else %}
+
+        {%endif%}
+    {% endfor %}
+{% endblock %}
